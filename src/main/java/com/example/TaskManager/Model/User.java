@@ -4,7 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;;
+import lombok.NoArgsConstructor;
+
+/**
+ * Layout information contained within task entities
+ * and modify database schema to include user table
+ * Also, generate id values for each user entity
+ */
 @Entity
 @Data
 @AllArgsConstructor

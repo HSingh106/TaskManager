@@ -6,6 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+
+/**
+ * Layout information contained within task entities
+ * and modify database schema to include task table
+ * Also generate id values and use foreign key to connect
+ * tasks to the users they belong to (establishing many-to-one relation)
+ */
 @Entity
 @Data
 @AllArgsConstructor
