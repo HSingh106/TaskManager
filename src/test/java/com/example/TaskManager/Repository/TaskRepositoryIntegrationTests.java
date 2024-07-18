@@ -1,13 +1,25 @@
 package com.example.TaskManager.Repository;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles("test")
 public class TaskRepositoryIntegrationTests {
+    private TaskRepository taskRepository;
+
+    @Autowired
+    public TaskRepositoryIntegrationTests(TaskRepository taskRepository){
+        this.taskRepository = taskRepository;
+    }
+
+    @Test
+    public void TaskRepository_TaskCreateAndRecall_ReturnCreatedTask(){
+
+    }
 
 }

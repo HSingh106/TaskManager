@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 /**
  * Layout information contained within task entities
@@ -26,8 +28,8 @@ public class Task {
     private String taskDescription;
     private String taskStatus;
     private String taskType;
-    private Date taskStartDate;
-    private Date taskEndDate;
+    private LocalDateTime taskStartDate;
+    private LocalDateTime taskEndDate;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
