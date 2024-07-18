@@ -26,14 +26,22 @@ public class UserRepositoryIntegrationTests {
         this.userRepository = ur;
     }
 
+    /**
+     * Tests to make sure save and recall via id operations work when
+     * saving and recalling entities from a database one at a time.
+     */
     @Test
     public void UserRepository_TestSaveAndReturnUser_ReturnSavedUsers(){
         User user = TestDataUtil.createTestUserOne();
-        //User user2 = TestDataUtil.createTestUserTwo();
+        User user2 = TestDataUtil.createTestUserTwo();
+        userRepository.save(user);
+        userRepository.save(user2);
         Optional<User> result = userRepository.findById(user.getId());
-        System.out.println("here is the id " + user.getId());
+        Optional<User> result2 = userRepository.findById(user2.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(user);
+        assertThat(result2).isPresent();
+        assertThat(result2.get()).isEqualTo(user2);
 
 
     }
