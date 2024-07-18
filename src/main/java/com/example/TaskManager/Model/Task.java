@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
-
 /**
  * Layout information contained within task entities
  * and modify database schema to include task table
@@ -22,7 +21,7 @@ import java.util.Date;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_id_seq")
-    private int id;
+    private Long id;
     private String taskName;
     private String taskDescription;
     private String taskStatus;
