@@ -19,10 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class TaskRepositoryIntegrationTests {
     private TaskRepository taskRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public TaskRepositoryIntegrationTests(TaskRepository taskRepository){
+    public TaskRepositoryIntegrationTests(TaskRepository taskRepository, UserRepository userRepository){
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -31,6 +33,7 @@ public class TaskRepositoryIntegrationTests {
     @Test
     public void TaskRepository_TaskCreateAndRecall_ReturnCreatedTask(){
         User user = TestDataUtil.createTestUserTwo();
+        userRepository.save(user);
         Task task = TestDataUtil.createTestTaskOne(user);
         taskRepository.save(task);
         Optional<Task> taskOptional = taskRepository.findById(task.getId());
@@ -41,10 +44,11 @@ public class TaskRepositoryIntegrationTests {
     @Test
     public void TaskRepository_CreateAndRecallMultipleTasks_ReturnCreatedTasks(){
         User user = TestDataUtil.createTestUserOne();
+        userRepository.save(user);
         Task task1 = TestDataUtil.createTestTaskOne(user);
         taskRepository.save(task1);
-       Task task2 = TestDataUtil.createTestTaskTwo(user);
-       taskRepository.save(task2);
+        Task task2 = TestDataUtil.createTestTaskTwo(user);
+        taskRepository.save(task2);
         Task task3 = TestDataUtil.createTestTaskThree(user);
         taskRepository.save(task3);
 

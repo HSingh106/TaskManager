@@ -13,7 +13,6 @@ public final class TestDataUtil {
 
     public static User createTestUserOne(){
         return User.builder()
-                .id(1L)
                 .username("JohnDoe241")
                 .password("JaneDoe153")
                 .build();
@@ -21,14 +20,12 @@ public final class TestDataUtil {
 
     public static User createTestUserTwo(){
         return User.builder()
-                .id(2L)
                 .username("RoniV43")
                 .password("123")
                 .build();
     }
     public static User createTestUserThree(){
         return User.builder()
-                .id(3L)
                 .username("AllIn43")
                 .password("AllOnBlack342")
                 .build();
@@ -36,7 +33,6 @@ public final class TestDataUtil {
 
     public static Task createTestTaskOne(final User user){
         return Task.builder()
-                .id(1L)
                 .taskName("Gym")
                 .taskDescription("Complete Workout")
                 .taskType("Health")
@@ -49,7 +45,6 @@ public final class TestDataUtil {
     }
     public static Task createTestTaskTwo(final User user){
         return Task.builder()
-                .id(2L)
                 .taskName("Wake Up")
                 .taskDescription("What time I plan on waking up")
                 .taskType("Simple")
@@ -61,7 +56,6 @@ public final class TestDataUtil {
     }
     public static Task createTestTaskThree(final User user){
         return Task.builder()
-                .id(3L)
                 .taskName("Pray")
                 .taskDescription("Time for prayer")
                 .taskType("Religious")

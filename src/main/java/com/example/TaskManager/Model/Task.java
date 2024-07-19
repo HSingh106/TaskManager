@@ -22,6 +22,7 @@ import java.util.Date;
 @Table(name = "tasks")
 public class Task {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String taskName;
     private String taskDescription;
@@ -29,7 +30,7 @@ public class Task {
     private String taskType;
     private LocalDateTime taskStartDate;
     private LocalDateTime taskEndDate;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 }
