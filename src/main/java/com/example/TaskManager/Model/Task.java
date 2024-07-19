@@ -22,7 +22,6 @@ import java.util.Date;
 @Table(name = "tasks")
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_id_seq")
     private Long id;
     private String taskName;
     private String taskDescription;
