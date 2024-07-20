@@ -1,7 +1,9 @@
 package com.example.TaskManager.Repository;
 
+import com.example.TaskManager.Model.Task;
 import com.example.TaskManager.Model.User;
 import com.example.TaskManager.TestDataUtil;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ public class UserRepositoryIntegrationTests {
      * saving and recalling entities from a database one at a time.
      */
     @Test
+    @Transactional
     public void UserRepository_TestSaveAndReturnUser_ReturnSavedUsers(){
         User user = TestDataUtil.createTestUserOne();
         User user2 = TestDataUtil.createTestUserTwo();
@@ -51,6 +54,7 @@ public class UserRepositoryIntegrationTests {
      * Tests ability to add multiple and return multiple users within the database
      */
     @Test
+    @Transactional
     public void UserRepository_TestMultipleUsersSaveAndReturn_ReturnSavedUsers(){
         User user = TestDataUtil.createTestUserOne();
         User user2 = TestDataUtil.createTestUserTwo();
@@ -67,6 +71,7 @@ public class UserRepositoryIntegrationTests {
      * with the changes being reflected in the database
      */
     @Test
+    @Transactional
     public void UserRepository_UpdateUser_ReturnUpdatedUser(){
         User user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
@@ -82,12 +87,29 @@ public class UserRepositoryIntegrationTests {
      * within the database
      */
     @Test
+    @Transactional
     public void UserRepository_DeleteUser_ReturnDeletedUser(){
         User user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
         userRepository.deleteById(user.getId());
         Optional<User> result = userRepository.findById(user.getId());
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    @Transactional
+    public void UserRepository_TestAddingTasksToUser_ReturnAddedTasks(){
+        User user = TestDataUtil.createTestUserOne();
+        Task task = TestDataUtil.createTestTaskOne();
+        Task task2 = TestDataUtil.createTestTaskTwo();
+        Task task3 = TestDataUtil.createTestTaskThree();
+        user.getTasks().add(task);
+        user.getTasks().add(task2);
+        user.getTasks().add(task3);
+        userRepository.save(user);
+        Optional<User> result = userRepository.findById(user.getId());
+        assertThat(result.get().getTasks()).hasSize(3).containsExactly(task, task2, task3);
+
     }
 
 

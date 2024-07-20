@@ -34,7 +34,7 @@ public class TaskRepositoryIntegrationTests {
     public void TaskRepository_TaskCreateAndRecall_ReturnCreatedTask(){
         User user = TestDataUtil.createTestUserTwo();
         userRepository.save(user);
-        Task task = TestDataUtil.createTestTaskOne(user);
+        Task task = TestDataUtil.createTestTaskOne();
         taskRepository.save(task);
         Optional<Task> taskOptional = taskRepository.findById(task.getId());
         assertThat(taskOptional).isPresent();
@@ -45,13 +45,12 @@ public class TaskRepositoryIntegrationTests {
     public void TaskRepository_CreateAndRecallMultipleTasks_ReturnCreatedTasks(){
         User user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
-        Task task1 = TestDataUtil.createTestTaskOne(user);
+        Task task1 = TestDataUtil.createTestTaskOne();
         taskRepository.save(task1);
-        Task task2 = TestDataUtil.createTestTaskTwo(user);
+        Task task2 = TestDataUtil.createTestTaskTwo();
         taskRepository.save(task2);
-        Task task3 = TestDataUtil.createTestTaskThree(user);
+        Task task3 = TestDataUtil.createTestTaskThree();
         taskRepository.save(task3);
-
         Iterable<Task> tasks = taskRepository.findAll();
         assertThat(tasks).hasSize(3).contains(task1,task2, task3);
     }

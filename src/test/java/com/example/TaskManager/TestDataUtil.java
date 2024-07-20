@@ -4,6 +4,7 @@ import com.example.TaskManager.Model.Task;
 import com.example.TaskManager.Model.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public final class TestDataUtil {
 
@@ -13,6 +14,7 @@ public final class TestDataUtil {
 
     public static User createTestUserOne(){
         return User.builder()
+                //.tasks(new ArrayList<>())
                 .username("JohnDoe241")
                 .password("JaneDoe153")
                 .build();
@@ -31,7 +33,7 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static Task createTestTaskOne(final User user){
+    public static Task createTestTaskOne(){
         return Task.builder()
                 .taskName("Gym")
                 .taskDescription("Complete Workout")
@@ -39,11 +41,10 @@ public final class TestDataUtil {
                 .taskStatus("Incomplete")
                 .taskStartDate(LocalDateTime.of(2024,8,1,10,0))
                 .taskEndDate(LocalDateTime.of(2024,8,1,12,0))
-                .user(user)
                 .build();
 
     }
-    public static Task createTestTaskTwo(final User user){
+    public static Task createTestTaskTwo(){
         return Task.builder()
                 .taskName("Wake Up")
                 .taskDescription("What time I plan on waking up")
@@ -51,10 +52,9 @@ public final class TestDataUtil {
                 .taskStatus("Incomplete")
                 .taskStartDate(LocalDateTime.of(2024,8,1,8,0))
                 .taskEndDate(LocalDateTime.of(2024,8,1,8,15))
-                .user(user)
                 .build();
     }
-    public static Task createTestTaskThree(final User user){
+    public static Task createTestTaskThree(){
         return Task.builder()
                 .taskName("Pray")
                 .taskDescription("Time for prayer")
@@ -62,7 +62,6 @@ public final class TestDataUtil {
                 .taskStatus("Incomplete")
                 .taskStartDate(LocalDateTime.of(2024,8,1,12,0))
                 .taskEndDate(LocalDateTime.of(2024,8,1,12,30))
-                .user(user)
                 .build();
     }
 
