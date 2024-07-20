@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -109,6 +108,24 @@ public class UserRepositoryIntegrationTests {
         userRepository.save(user);
         Optional<User> result = userRepository.findById(user.getId());
         assertThat(result.get().getTasks()).hasSize(3).containsExactly(task, task2, task3);
+
+    }
+
+    public void UserRepository_TestingAddingDeletingTasks_ReturnDeletedTasks(){
+        User user = TestDataUtil.createTestUserOne();
+        Task task = TestDataUtil.createTestTaskOne();
+        Task task2 = TestDataUtil.createTestTaskTwo();
+        Task task3 = TestDataUtil.createTestTaskThree();
+        user.getTasks().add(task);
+        user.getTasks().add(task2);
+        user.getTasks().add(task3);
+        userRepository.save(user);
+        userRepository.findById(user.getId()).get().getTasks().remove(task);
+        userRepository.save(user);
+        userRepository.findById(user.getId()).get().getTasks().remove(task2);
+        userRepository.save(user);
+        Optional<User> result = userRepository.findById(user.getId());
+        assertThat(result.get().getTasks()).hasSize(1).containsExactly(task3);
 
     }
 
