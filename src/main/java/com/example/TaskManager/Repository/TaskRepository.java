@@ -1,7 +1,6 @@
 package com.example.TaskManager.Repository;
 
-import com.example.TaskManager.Model.Task;
-import com.example.TaskManager.Model.User;
+import com.example.TaskManager.Model.Entities.Task;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

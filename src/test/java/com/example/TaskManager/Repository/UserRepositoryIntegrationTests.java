@@ -1,7 +1,7 @@
 package com.example.TaskManager.Repository;
 
-import com.example.TaskManager.Model.Task;
-import com.example.TaskManager.Model.User;
+import com.example.TaskManager.Model.Entities.Task;
+import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.TestDataUtil;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;

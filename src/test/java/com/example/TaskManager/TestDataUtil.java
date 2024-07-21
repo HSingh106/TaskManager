@@ -1,10 +1,9 @@
 package com.example.TaskManager;
 
-import com.example.TaskManager.Model.Task;
-import com.example.TaskManager.Model.User;
+import com.example.TaskManager.Model.Entities.Task;
+import com.example.TaskManager.Model.Entities.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public final class TestDataUtil {
 

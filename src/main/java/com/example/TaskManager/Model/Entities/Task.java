@@ -1,14 +1,13 @@
-package com.example.TaskManager.Model;
+package com.example.TaskManager.Model.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+
 /**
  * Layout information contained within task entities
  * and modify database schema to include task table

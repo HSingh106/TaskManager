@@ -1,4 +1,4 @@
-package com.example.TaskManager.Model;
+package com.example.TaskManager.Model.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Layout information contained within task entities
