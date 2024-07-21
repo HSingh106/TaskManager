@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService implements UserService{
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
@@ -46,3 +46,4 @@ public class UserServiceImpl implements UserService implements UserService{
         return null;
     }
 }
+
