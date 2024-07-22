@@ -7,6 +7,9 @@ import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.Service.TaskService;
 import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.mappers.Mapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +26,11 @@ public class TaskController {
         this.taskMapper = taskMapper;
     }
 
-    @PostMapping(path = "/tasks")
-    public TaskDTO addUser(@RequestBody TaskDTO taskDTO) {
+    @PostMapping(path = "/tasks/{id}")
+    public ResponseEntity<Task> addTask(@PathVariable("id")  Long id, @RequestBody TaskDTO taskDTO) {
         Task task = taskMapper.mapFrom(taskDTO);
-        Task savedTask = taskService.save(task);
-        return taskMapper.mapTo(savedTask);
+        Task createdTask = taskService.save(id, task);
+        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
 

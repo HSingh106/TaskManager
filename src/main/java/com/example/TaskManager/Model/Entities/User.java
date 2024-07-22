@@ -31,7 +31,6 @@ public class User {
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @Builder.Default
     private List<Task> tasks = new ArrayList<>();
 

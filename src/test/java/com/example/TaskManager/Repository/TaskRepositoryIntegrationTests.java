@@ -30,6 +30,7 @@ public class TaskRepositoryIntegrationTests {
      * Tests to make sure a task can be created, saved, and recalled within a database
      */
     @Test
+    @Transactional
     public void TaskRepository_TaskCreateAndRecall_ReturnCreatedTask(){
         User user = TestDataUtil.createTestUserTwo();
         userRepository.save(user);
