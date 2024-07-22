@@ -1,5 +1,6 @@
 package com.example.TaskManager.Service.Implementation;
 
+import com.example.TaskManager.Exceptions.UserNotFoundException;
 import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Repository.TaskRepository;
 import com.example.TaskManager.Repository.UserRepository;
@@ -22,12 +23,8 @@ public class TaskServiceImpl implements TaskService {
     }
     @Override
     public Task save(Long id,Task task) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.getTasks().add(task); // Use the helper method
-            userRepository.save(user);
-        }
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user with associated review not found"));
+        task.setUser(user);
         return taskRepository.save(task);
     }
 

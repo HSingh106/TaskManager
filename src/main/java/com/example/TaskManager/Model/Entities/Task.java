@@ -31,4 +31,9 @@ public class Task {
     private String taskType;
     private LocalDateTime taskStartDate;
     private LocalDateTime taskEndDate;
+
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 }
