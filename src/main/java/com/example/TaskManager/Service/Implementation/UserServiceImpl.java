@@ -5,6 +5,7 @@ import com.example.TaskManager.Repository.UserRepository;
 import com.example.TaskManager.Service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,22 +29,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return List.of();
+        List<User> users = new ArrayList<User>();
+        userRepository.findAll().forEach(users::add);
+        return users;
     }
 
     @Override
     public void delete(Long id) {
-
+        userRepository.deleteById(id);
     }
 
     @Override
     public boolean existsById(Long id) {
-        return false;
+        return userRepository.existsById(id);
     }
 
     @Override
     public User partialUpdate(Long id, User user) {
-        return null;
+        User changeUser = userRepository.findById(id).get();
+        if(user.getPassword() != null){
+            changeUser.setPassword(user.getPassword());
+        }
+        if(user.getUsername() != null){
+            changeUser.setUsername(user.getUsername());
+        }
+        return userRepository.save(changeUser);
     }
 }
 
