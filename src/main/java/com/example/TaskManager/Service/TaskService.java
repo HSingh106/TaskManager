@@ -9,9 +9,11 @@ import java.util.Optional;
 public interface TaskService {
     Task save(Long id, Task task);
 
-    Optional<Task> findOne(Long id);
+    Task findOne(Long userId, String name);
 
-    List<Task> findAll();
+    List<Task> findAll(Long id);
+
+    List<Task> findAllUsersWithName(Long userId, String name);
 
     void delete(Long id);
 

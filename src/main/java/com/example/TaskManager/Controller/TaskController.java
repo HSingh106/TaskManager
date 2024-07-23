@@ -9,10 +9,9 @@ import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.mappers.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.stream.Collectors;
+import java.util.List;
 
 @RestController
 public class TaskController {
@@ -31,6 +30,41 @@ public class TaskController {
         Task task = taskMapper.mapFrom(taskDTO);
         Task createdTask = taskService.save(id, task);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/tasks/{id}/{name}")
+    public ResponseEntity<TaskDTO> getTaskByName(@PathVariable("id") Long userId, @PathVariable("name") String name){
+        Task foundTask = taskService.findOne(userId, name);
+        TaskDTO taskDTO = taskMapper.mapTo(foundTask);
+        return new ResponseEntity<>(taskDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/users/{id}/tasks")
+    public List<TaskDTO> getAllTasksForUser(@PathVariable("id") Long userId){
+        List<Task> tasks = taskService.findAll(userId);
+        return tasks.stream()
+                .map(taskMapper::mapTo)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "/users/{id}/tasks/{name}")
+    public List<TaskDTO> getAllTasksWithName(@PathVariable("id") Long userId, @PathVariable("name") String name){
+        List<Task> tasks = taskService.findAllUsersWithName(userId, name);
+        return tasks.stream()
+                .map(taskMapper::mapTo)
+                .collect(Collectors.toList());
+    }
+
+    @DeleteMapping(path = "/tasks/delete/{id}")
+    public ResponseEntity deleteBook(@PathVariable("id") Long id) {
+        taskService.delete(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/task/PartialUpdate/{id}")
+    public ResponseEntity<Task> partialUpdateTask(@PathVariable Long id, @RequestBody Task task) {
+        Task updatedTask = taskService.partialUpdate(id, task);
+        return ResponseEntity.ok(updatedTask);
     }
 
 
