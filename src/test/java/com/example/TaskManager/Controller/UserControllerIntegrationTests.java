@@ -119,7 +119,11 @@ public class UserControllerIntegrationTests {
                 MockMvcRequestBuilders.put("/user/Complete/" + savedUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(authorDTOJson)
-        ).andExpect(MockMvcResultMatchers.status().isOk());
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.username").value("JoeDTO")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.password").value("JaneDTO"));
+
     }
 
     @Test

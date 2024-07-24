@@ -1,6 +1,6 @@
 package com.example.TaskManager.Controller;
 
-import com.example.TaskManager.Model.DTO.UserDTO;
+import com.example.TaskManager.Model.DTO.TaskDTO;
 import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.Service.TaskService;
@@ -190,6 +190,69 @@ public class TaskControllerIntegrationTests {
                 MockMvcRequestBuilders.delete("/tasks/delete/{id}", savedTask.getId())
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void testPartialUpdateTaskEndpoint() throws Exception{
+        User user = TestDataUtil.createTestUserOne();
+        User savedUser = userService.save(user);
+
+        Task task = TestDataUtil.createTestTaskOne();
+        Task savedTask = taskService.save(savedUser.getId(), task);
+        TaskDTO taskDTO = TestDataUtil.createTestTaskDTOOne();
+        String taskDTOJson = objectMapper.writeValueAsString(taskDTO);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/task/PartialUpdate/" + savedUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskDTOJson)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedTask.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.taskName").value("TaskDTO")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.taskDescription").value("DescriptionDTO")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+        );
+    }
+
+    @Test
+    public void testFullUpdateReturns404() throws Exception{
+        TaskDTO testTaskDTO = TestDataUtil.createTestTaskDTOOne();
+        String taskJson = objectMapper.writeValueAsString(testTaskDTO);
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/task/complete/704")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskJson)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testFullUpdateReturns200() throws Exception{
+        User testUser = TestDataUtil.createTestUserOne();
+        User savedUser = userService.save(testUser);
+        Task testTask = TestDataUtil.createTestTaskOne();
+        Task savedTask = taskService.save(savedUser.getId(), testTask);
+
+        TaskDTO testTaskDTO = TestDataUtil.createTestTaskDTOTwo();
+        String authorDTOJson = objectMapper.writeValueAsString(testTaskDTO);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/task/complete/{taskId}", savedTask.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(authorDTOJson)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedTask.getId())
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskName").value("TaskDTO")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskDescription").value("DescriptionDTO")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskStatus").value("DTO")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskType").value("DTO")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskStartDate").value(LocalDateTime.of(2024,8,1,8,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskEndDate").value(LocalDateTime.of(2024,8,1,8,15,0).format(formatter)
+        ));
     }
 
 }

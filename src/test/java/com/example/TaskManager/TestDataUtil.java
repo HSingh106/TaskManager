@@ -1,5 +1,6 @@
 package com.example.TaskManager;
 
+import com.example.TaskManager.Model.DTO.TaskDTO;
 import com.example.TaskManager.Model.DTO.UserDTO;
 import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Model.Entities.User;
@@ -40,6 +41,26 @@ public final class TestDataUtil {
                 .id(1L)
                 .username("JoeDTO")
                 .password("JaneDTO")
+                .build();
+    }
+
+    public static TaskDTO createTestTaskDTOOne(){
+        return TaskDTO.builder()
+                .id(1L)
+                .taskName("TaskDTO")
+                .taskDescription("DescriptionDTO")
+                .build();
+    }
+
+    public static TaskDTO createTestTaskDTOTwo(){
+        return TaskDTO.builder()
+                .id(1L)
+                .taskName("TaskDTO")
+                .taskDescription("DescriptionDTO")
+                .taskType("DTO")
+                .taskStatus("DTO")
+                .taskStartDate(LocalDateTime.of(2024,8,1,8,0,0))
+                .taskEndDate(LocalDateTime.of(2024,8,1,8,15,0))
                 .build();
     }
 

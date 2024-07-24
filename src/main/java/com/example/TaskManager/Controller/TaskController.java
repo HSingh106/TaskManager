@@ -61,6 +61,20 @@ public class TaskController {
         return ResponseEntity.ok(updatedTask);
     }
 
+    @PutMapping(path = "/task/complete/{taskId}")
+    public ResponseEntity<TaskDTO> fullUpdateTask(@PathVariable("taskId") Long taskId, @RequestBody TaskDTO TaskDTO){
+        if(!taskService.existsById(taskId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        TaskDTO.setId(taskId);
+        Task task = taskMapper.mapFrom(TaskDTO);
+        Task savedTask = taskService.save(taskService.findOne(taskId).getUser().getId(),task);
+        return new ResponseEntity<>(
+                taskMapper.mapTo(savedTask),
+                HttpStatus.OK);
+    }
+
 
 
 }

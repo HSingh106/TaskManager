@@ -30,21 +30,11 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(task);
     }
 
-
     @Override
-    public Task findOne(Long userId, String name) {
-        List<Task> tasks = userRepository.findById(userId).get().getTasks();
-        Task foundTask = null;
-        for (Task task : tasks) {
-            if (task.getTaskName().equals(name)) {
-                foundTask = task;
-            }
-        }
-        if(foundTask == null){
-            throw new TaskWithNameDoesNotExistException("Cannot find task with name");
-        }
-        return foundTask;
+    public Task findOne(Long taskId) {
+        return taskRepository.findById(taskId).orElseThrow();
     }
+
 
     @Override
     public List<Task> findAll(Long id) {

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface TaskService {
     Task save(Long id, Task task);
 
-    Task findOne(Long userId, String name);
+    Task findOne(Long taskId);
 
     List<Task> findAll(Long id);
 
