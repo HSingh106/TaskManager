@@ -172,4 +172,12 @@ public class TaskControllerIntegrationTests {
 
     }
 
+    @Test
+    public void testDeleteTaskEndpointReturns404() throws Exception{
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/tasks/delete/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
 }
