@@ -180,4 +180,16 @@ public class TaskControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
+    @Test
+    public void testDeleteUserEndpoint() throws Exception{
+        User user = TestDataUtil.createTestUserOne();
+        User savedUser = userService.save(user);
+        Task task = TestDataUtil.createTestTaskOne();
+        Task savedTask = taskService.save(savedUser.getId(), task);
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/tasks/delete/{id}", savedTask.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
 }
