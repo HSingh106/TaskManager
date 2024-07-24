@@ -30,6 +30,7 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(task);
     }
 
+
     @Override
     public Task findOne(Long userId, String name) {
         List<Task> tasks = userRepository.findById(userId).get().getTasks();

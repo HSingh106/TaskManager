@@ -31,6 +31,8 @@ public class TaskControllerIntegrationTests {
 
     private TaskService taskService;
 
+    private DateTimeFormatter formatter;
+
     private UserService userService;
 
     private MockMvc mockMvc;
@@ -39,6 +41,7 @@ public class TaskControllerIntegrationTests {
 
     @Autowired
     public TaskControllerIntegrationTests(MockMvc mockMvc, TaskService taskService, UserService userService) {
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         this.userService = userService;
         this.mockMvc = mockMvc;
         this.taskService = taskService;
@@ -52,7 +55,6 @@ public class TaskControllerIntegrationTests {
         User userTask = TestDataUtil.createTestUserOne();
 
         User savedUser = userService.save(userTask);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         String taskJson = objectMapper.writeValueAsString(taskTest);
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/tasks/{id}", savedUser.getId())
@@ -70,6 +72,58 @@ public class TaskControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.jsonPath("$.taskType").value("Health")
         ).andExpect(MockMvcResultMatchers.jsonPath("$.taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
         ).andExpect(MockMvcResultMatchers.jsonPath("$.taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter)));
+    }
+
+    @Test
+    public void testGetListAllUserTaskEndpoint() throws Exception{
+        User testUser = TestDataUtil.createTestUserOne();
+        Task taskTest = TestDataUtil.createTestTaskOne();
+        User savedUser = userService.save(testUser);
+        Task taskTestTwo = TestDataUtil.createTestTaskTwo();
+        Task taskTestThree = TestDataUtil.createTestTaskThree();
+        taskService.save(savedUser.getId(), taskTest);
+        taskService.save(savedUser.getId(), taskTestTwo);
+        taskService.save(savedUser.getId(), taskTestThree);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/users/{id}/tasks", savedUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].taskName").value("Gym")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].taskDescription").value("Complete Workout")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].taskName").value("Wake Up")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].taskDescription").value("What time I plan on waking up")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskType").value("Simple")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStartDate").value(LocalDateTime.of(2024,8,1,8,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskEndDate").value(LocalDateTime.of(2024,8,1,8,15,0).format(formatter))
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[2].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[2].taskName").value("Pray")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[2].taskDescription").value("Time for prayer")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskType").value("Religious")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStartDate").value(LocalDateTime.of(2024,8,1,12,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskEndDate").value(LocalDateTime.of(2024,8,1,12,30).format(formatter))
+        );
+    }
+
+    @Test
+    public void testGetAllUserTaskWithNameEndpoint() throws Exception{
+
     }
 
 }
