@@ -55,10 +55,27 @@ public class UserController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping("/user/PartialUpdate/{id}")
-    public ResponseEntity<User> partialUpdateUser(@PathVariable Long id, @RequestBody User user) {
+    @PatchMapping("/user/Update/{id}")
+    public ResponseEntity<UserDTO> partialUpdateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        if(!userService.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = userMapper.mapFrom(userDTO);
         User updatedUser = userService.partialUpdate(id, user);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(userMapper.mapTo(updatedUser));
+    }
+
+    @PutMapping(path = "/user/Complete/{id}")
+    public ResponseEntity<UserDTO> fullUpdateUser(@PathVariable("id") Long userId, @RequestBody UserDTO userDTO){
+        if(!userService.existsById(userId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userDTO.setId(userId);
+        User user = userMapper.mapFrom(userDTO);
+        User savedUser = userService.save(user);
+        return new ResponseEntity<>(
+                userMapper.mapTo(savedUser),
+                HttpStatus.OK);
     }
 
 
