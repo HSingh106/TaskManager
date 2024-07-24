@@ -60,8 +60,8 @@ public final class TestDataUtil {
                 .taskDescription("What time I plan on waking up")
                 .taskType("Simple")
                 .taskStatus("Incomplete")
-                .taskStartDate(LocalDateTime.of(2024,8,1,8,0))
-                .taskEndDate(LocalDateTime.of(2024,8,1,8,15))
+                .taskStartDate(LocalDateTime.of(2024,8,1,8,0,0))
+                .taskEndDate(LocalDateTime.of(2024,8,1,8,15,0))
                 .build();
     }
     public static Task createTestTaskThree(){
