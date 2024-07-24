@@ -123,6 +123,52 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testGetAllUserTaskWithNameEndpoint() throws Exception{
+        User testUser = TestDataUtil.createTestUserOne();
+        Task taskTest = TestDataUtil.createTestTaskOne();
+        Task taskTestTwo = TestDataUtil.createTestTaskOne();
+        taskTestTwo.setTaskStatus("Complete");
+        Task taskTestThree = TestDataUtil.createTestTaskOne();
+        taskTestThree.setTaskDescription("Chest & Triceps");
+        User savedUser = userService.save(testUser);
+        taskService.save(savedUser.getId(), taskTest);
+        taskService.save(savedUser.getId(), taskTestTwo);
+        taskService.save(savedUser.getId(), taskTestThree);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/users/{id}/tasks/{name}", savedUser.getId(), "Gym")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].taskName").value("Gym")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].taskDescription").value("Complete Workout")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].taskName").value("Gym")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].taskDescription").value("Complete Workout")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStatus").value("Complete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[2].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[2].taskName").value("Gym")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[2].taskDescription").value("Chest & Triceps")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+        );
 
     }
 

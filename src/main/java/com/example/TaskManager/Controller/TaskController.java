@@ -32,12 +32,6 @@ public class TaskController {
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/tasks/{id}/{name}")
-    public ResponseEntity<TaskDTO> getTaskByName(@PathVariable("id") Long userId, @PathVariable("name") String name){
-        Task foundTask = taskService.findOne(userId, name);
-        TaskDTO taskDTO = taskMapper.mapTo(foundTask);
-        return new ResponseEntity<>(taskDTO, HttpStatus.OK);
-    }
 
     @GetMapping(path = "/users/{id}/tasks")
     public List<TaskDTO> getAllTasksForUser(@PathVariable("id") Long userId){
