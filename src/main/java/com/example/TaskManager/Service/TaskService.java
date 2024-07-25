@@ -1,19 +1,18 @@
 package com.example.TaskManager.Service;
 
 import com.example.TaskManager.Model.Entities.Task;
-
-
 import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TaskService {
     Task save(Long id, Task task);
 
     Task findOne(Long taskId);
 
-    List<Task> findAll(Long id);
+    Page<Task> findAll(Pageable pageable, Long id);
 
-    List<Task> findAllUsersWithName(Long userId, String name);
+    Page<Task> findAllUsersWithName(Pageable page, Long userId, String name);
 
     void delete(Long id);
 

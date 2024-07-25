@@ -61,13 +61,15 @@ public class UserControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/users/all")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "1")
         ).andExpect(MockMvcResultMatchers.status().isOk()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].username").value("JohnDoe241")
+                MockMvcResultMatchers.jsonPath("$.content[0].username").value("JohnDoe241")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].password").value("JaneDoe153")
+                MockMvcResultMatchers.jsonPath("$.content[0].password").value("JaneDoe153")
         );
     }
 

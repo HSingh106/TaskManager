@@ -1,8 +1,10 @@
 package com.example.TaskManager.Repository;
 
+import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Model.Entities.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,5 +12,5 @@ import org.springframework.stereotype.Repository;
  * are managed with respect to user entities
  */
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long>, PagingAndSortingRepository<User, Long> {
 }

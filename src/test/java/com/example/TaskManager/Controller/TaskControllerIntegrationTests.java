@@ -109,37 +109,39 @@ public class TaskControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/users/{id}/tasks", savedUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)
+                        .param("page", "1")
+                        .param("size", "3")
         ).andExpect(MockMvcResultMatchers.status().isOk()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].taskName").value("Gym")
+                MockMvcResultMatchers.jsonPath("$.content[0].taskName").value("Gym")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].taskDescription").value("Complete Workout")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStatus").value("Incomplete")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskType").value("Health")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+                MockMvcResultMatchers.jsonPath("$.content[0].taskDescription").value("Complete Workout")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content[1].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].taskName").value("Wake Up")
+                MockMvcResultMatchers.jsonPath("$.content[1].taskName").value("Wake Up")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].taskDescription").value("What time I plan on waking up")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStatus").value("Incomplete")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskType").value("Simple")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStartDate").value(LocalDateTime.of(2024,8,1,8,0,0).format(formatter))
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskEndDate").value(LocalDateTime.of(2024,8,1,8,15,0).format(formatter))
+                MockMvcResultMatchers.jsonPath("$.content[1].taskDescription").value("What time I plan on waking up")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskType").value("Simple")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskStartDate").value(LocalDateTime.of(2024,8,1,8,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskEndDate").value(LocalDateTime.of(2024,8,1,8,15,0).format(formatter))
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[2].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content[2].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[2].taskName").value("Pray")
+                MockMvcResultMatchers.jsonPath("$.content[2].taskName").value("Pray")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[2].taskDescription").value("Time for prayer")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStatus").value("Incomplete")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskType").value("Religious")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStartDate").value(LocalDateTime.of(2024,8,1,12,0).format(formatter))
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskEndDate").value(LocalDateTime.of(2024,8,1,12,30).format(formatter))
+                MockMvcResultMatchers.jsonPath("$.content[2].taskDescription").value("Time for prayer")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskType").value("Religious")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskStartDate").value(LocalDateTime.of(2024,8,1,12,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskEndDate").value(LocalDateTime.of(2024,8,1,12,30).format(formatter))
         );
     }
 
@@ -159,37 +161,39 @@ public class TaskControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/users/{id}/tasks/{name}", savedUser.getId(), "Gym")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "3")
         ).andExpect(MockMvcResultMatchers.status().isOk()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].taskName").value("Gym")
+                MockMvcResultMatchers.jsonPath("$.content[0].taskName").value("Gym")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].taskDescription").value("Complete Workout")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStatus").value("Incomplete")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskType").value("Health")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[0].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+                MockMvcResultMatchers.jsonPath("$.content[0].taskDescription").value("Complete Workout")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content[1].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].taskName").value("Gym")
+                MockMvcResultMatchers.jsonPath("$.content[1].taskName").value("Gym")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].taskDescription").value("Complete Workout")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStatus").value("Complete")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskType").value("Health")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[1].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+                MockMvcResultMatchers.jsonPath("$.content[1].taskDescription").value("Complete Workout")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskStatus").value("Complete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[1].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[2].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content[2].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[2].taskName").value("Gym")
+                MockMvcResultMatchers.jsonPath("$.content[2].taskName").value("Gym")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[2].taskDescription").value("Chest & Triceps")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStatus").value("Incomplete")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskType").value("Health")
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
-        ).andExpect(MockMvcResultMatchers.jsonPath("$[2].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
+                MockMvcResultMatchers.jsonPath("$.content[2].taskDescription").value("Chest & Triceps")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[2].taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter))
         );
 
     }

@@ -3,6 +3,8 @@ package com.example.TaskManager.Service.Implementation;
 import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.Repository.UserRepository;
 import com.example.TaskManager.Service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,10 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        List<User> users = new ArrayList<User>();
-        userRepository.findAll().forEach(users::add);
-        return users;
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override

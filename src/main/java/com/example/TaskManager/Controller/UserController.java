@@ -5,6 +5,8 @@ import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.mappers.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,11 +44,9 @@ public class UserController {
     }
 
     @GetMapping(path = "/users/all")
-    public List<UserDTO> getAllUsers() {
-        List<User> userFound = userService.findAll();
-        return userFound.stream()
-                .map(userMapper::mapTo)
-                .collect(Collectors.toList());
+    public Page<UserDTO> getAllUsers(Pageable pageable) {
+        Page<User> userFound = userService.findAll(pageable);
+        return userFound.map(userMapper::mapTo);
     }
 
     @DeleteMapping(path = "/users/delete/{id}")

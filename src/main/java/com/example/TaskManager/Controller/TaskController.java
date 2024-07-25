@@ -7,6 +7,8 @@ import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.Service.TaskService;
 import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.mappers.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +28,10 @@ public class TaskController {
     }
 
     @PostMapping(path = "/tasks/{id}")
-    public ResponseEntity<Task> addTask(@PathVariable("id")  Long id, @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> addTask(@PathVariable("id")  Long id, @RequestBody TaskDTO taskDTO) {
         Task task = taskMapper.mapFrom(taskDTO);
         Task createdTask = taskService.save(id, task);
-        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
+        return new ResponseEntity<>(taskMapper.mapTo(createdTask), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/user/task/{taskId}")
@@ -39,19 +41,15 @@ public class TaskController {
 
 
     @GetMapping(path = "/users/{id}/tasks")
-    public List<TaskDTO> getAllTasksForUser(@PathVariable("id") Long userId){
-        List<Task> tasks = taskService.findAll(userId);
-        return tasks.stream()
-                .map(taskMapper::mapTo)
-                .collect(Collectors.toList());
+    public Page<TaskDTO> getAllTasksForUser(@PathVariable("id") Long userId, Pageable pageable){
+        Page<Task> tasks = taskService.findAll(pageable,userId);
+        return tasks.map(taskMapper::mapTo);
     }
 
     @GetMapping(path = "/users/{id}/tasks/{name}")
-    public List<TaskDTO> getAllTasksWithName(@PathVariable("id") Long userId, @PathVariable("name") String name){
-        List<Task> tasks = taskService.findAllUsersWithName(userId, name);
-        return tasks.stream()
-                .map(taskMapper::mapTo)
-                .collect(Collectors.toList());
+    public Page<TaskDTO> getAllTasksWithName(@PathVariable("id") Long userId, @PathVariable("name") String name, Pageable pageable){
+        Page<Task> tasks = taskService.findAllUsersWithName(pageable, userId, name);
+        return tasks.map(taskMapper::mapTo);
     }
 
     @DeleteMapping(path = "/tasks/delete/{id}")

@@ -6,6 +6,9 @@ import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Repository.TaskRepository;
 import com.example.TaskManager.Repository.UserRepository;
 import com.example.TaskManager.Service.TaskService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.TaskManager.Model.Entities.User;
 
@@ -37,12 +40,16 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public List<Task> findAll(Long id) {
-        return userRepository.findById(id).get().getTasks();
+    public Page<Task> findAll(Pageable page, Long id) {
+
+        List<Task> tasks = userRepository.findById(id).get().getTasks();
+
+        return new PageImpl<>(tasks, page, tasks.size());
+
     }
 
     @Override
-    public List<Task> findAllUsersWithName(Long userId, String name) {
+    public Page<Task> findAllUsersWithName(Pageable pageable, Long userId, String name) {
         List<Task> tasks = userRepository.findById(userId).get().getTasks();
         List<Task> foundTasks = new ArrayList<>();
         for(Task task: tasks){
@@ -53,7 +60,7 @@ public class TaskServiceImpl implements TaskService {
         if(foundTasks.isEmpty()){
             throw new TaskWithNameDoesNotExistException("Task Does Not Exist");
         }
-        return foundTasks;
+        return new PageImpl<>(foundTasks, pageable, foundTasks.size());
     }
 
 
