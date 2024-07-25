@@ -75,6 +75,28 @@ public class TaskControllerIntegrationTests {
     }
 
     @Test
+    public void testGetTaskEndpoint() throws Exception{
+        User user = TestDataUtil.createTestUserOne();
+        Task task = TestDataUtil.createTestTaskOne();
+        User savedUser = userService.save(user);
+        Task savedTask = taskService.save(savedUser.getId(), task);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/user/task/{taskId}", savedTask.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.taskName").value("Gym")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.taskDescription").value("Complete Workout")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskStatus").value("Incomplete")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskType").value("Health")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskStartDate").value(LocalDateTime.of(2024,8,1,10,0,0).format(formatter))
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.taskEndDate").value(LocalDateTime.of(2024,8,1,12,0,0).format(formatter)));
+    }
+
+    @Test
     public void testGetListAllUserTaskEndpoint() throws Exception{
         User testUser = TestDataUtil.createTestUserOne();
         Task taskTest = TestDataUtil.createTestTaskOne();
