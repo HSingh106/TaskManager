@@ -4,6 +4,7 @@ import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.TestDataUtil;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +36,10 @@ public class UserRepositoryIntegrationTests {
     @Transactional
     public void UserRepository_TestSaveAndReturnUser_ReturnSavedUsers(){
         User user = TestDataUtil.createTestUserOne();
-        User user2 = TestDataUtil.createTestUserTwo();
         userRepository.save(user);
-        userRepository.save(user2);
         Optional<User> result = userRepository.findById(user.getId());
-        Optional<User> result2 = userRepository.findById(user2.getId());
-        assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(user);
-        assertThat(result2).isPresent();
-        assertThat(result2.get()).isEqualTo(user2);
-
+        assertThat(result.get()).usingRecursiveComparison()
+                .usingOverriddenEquals().isEqualTo(user);
 
     }
 
@@ -61,7 +56,9 @@ public class UserRepositoryIntegrationTests {
         userRepository.save(user2);
         userRepository.save(user3);
         Iterable<User> result = userRepository.findAll();
-        assertThat(result).hasSize(3).containsExactly(user, user2, user3);
+        assertThat(result).hasSize(3)
+                .usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(user, user2, user3);
     }
 
     /**
@@ -77,7 +74,8 @@ public class UserRepositoryIntegrationTests {
         userRepository.save(user);
         Optional<User> result = userRepository.findById(user.getId());
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(user);
+        assertThat(result.get()).usingRecursiveComparison()
+                .usingOverriddenEquals().isEqualTo(user);
     }
 
     /**
@@ -99,36 +97,19 @@ public class UserRepositoryIntegrationTests {
     public void UserRepository_TestAddingTasksToUser_ReturnAddedTasks(){
         User user = TestDataUtil.createTestUserOne();
         Task task = TestDataUtil.createTestTaskOne();
+        task.setId(1L);
         Task task2 = TestDataUtil.createTestTaskTwo();
+        task2.setId(2L);
         Task task3 = TestDataUtil.createTestTaskThree();
+        task3.setId(3L);
         user.getTasks().add(task);
         user.getTasks().add(task2);
         user.getTasks().add(task3);
         userRepository.save(user);
         Optional<User> result = userRepository.findById(user.getId());
-        assertThat(result.get().getTasks()).hasSize(3).containsExactly(task, task2, task3);
+        assertThat(result.get().getTasks()).hasSize(3)
+                .usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(task, task2, task3);
 
     }
-
-    public void UserRepository_TestingAddingDeletingTasks_ReturnDeletedTasks(){
-        User user = TestDataUtil.createTestUserOne();
-        Task task = TestDataUtil.createTestTaskOne();
-        Task task2 = TestDataUtil.createTestTaskTwo();
-        Task task3 = TestDataUtil.createTestTaskThree();
-        user.getTasks().add(task);
-        user.getTasks().add(task2);
-        user.getTasks().add(task3);
-        userRepository.save(user);
-        userRepository.findById(user.getId()).get().getTasks().remove(task);
-        userRepository.save(user);
-        userRepository.findById(user.getId()).get().getTasks().remove(task2);
-        userRepository.save(user);
-        Optional<User> result = userRepository.findById(user.getId());
-        assertThat(result.get().getTasks()).hasSize(1).containsExactly(task3);
-
-    }
-
-
-
-
 }

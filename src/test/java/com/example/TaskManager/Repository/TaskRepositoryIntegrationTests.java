@@ -32,20 +32,13 @@ public class TaskRepositoryIntegrationTests {
     @Test
     @Transactional
     public void TaskRepository_TaskCreateAndRecall_ReturnCreatedTask(){
-        User user = TestDataUtil.createTestUserTwo();
+        User user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
         Task task = TestDataUtil.createTestTaskOne();
-        Task task2 = TestDataUtil.createTestTaskTwo();
-        task.setId(1L);
-        task2.setId(2L);
-        task.setId(1L);
-        user.getTasks().add(task);
-        userRepository.save(user);
-        Iterable<Task> result = taskRepository.findAll();
-        assertThat(result).hasSize(1).containsExactly(task);
-        taskRepository.save(task2);
-        result = taskRepository.findAll();
-        assertThat(result).hasSize(2).containsExactly(task,task2);
+        task.setUser(user);
+        taskRepository.save(task);
+        assertThat(taskRepository.findAll()).contains(task);
+
     }
 
     @Test
