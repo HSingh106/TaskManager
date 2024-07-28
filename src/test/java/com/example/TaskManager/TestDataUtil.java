@@ -3,7 +3,7 @@ package com.example.TaskManager;
 import com.example.TaskManager.Model.DTO.TaskDTO;
 import com.example.TaskManager.Model.DTO.UserDTO;
 import com.example.TaskManager.Model.Entities.Task;
-import com.example.TaskManager.Model.Entities.User;
+import com.example.TaskManager.Model.Entities.UserEntity;
 
 import java.time.LocalDateTime;
 
@@ -13,23 +13,23 @@ public final class TestDataUtil {
 
     }
 
-    public static User createTestUserOne(){
-        return User.builder()
+    public static UserEntity createTestUserOne(){
+        return UserEntity.builder()
                 .id(1L)
                 .username("JohnDoe241")
                 .password("JaneDoe153")
                 .build();
     }
 
-    public static User createTestUserTwo(){
-        return User.builder()
+    public static UserEntity createTestUserTwo(){
+        return UserEntity.builder()
                 .id(2L)
                 .username("RoniV43")
                 .password("123")
                 .build();
     }
-    public static User createTestUserThree(){
-        return User.builder()
+    public static UserEntity createTestUserThree(){
+        return UserEntity.builder()
                 .id(3L)
                 .username("AllIn43")
                 .password("AllOnBlack342")
@@ -106,7 +106,7 @@ public final class TestDataUtil {
      *     private Date taskEndDate;
      *     @ManyToOne(cascade = CascadeType.ALL)
      *     @JoinColumn(name = "user_id")
-     *     private User user;
+     *     private UserEntity user;
      */
 
 

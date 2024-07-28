@@ -1,19 +1,14 @@
 package com.example.TaskManager.Controller;
 
 import com.example.TaskManager.Model.DTO.TaskDTO;
-import com.example.TaskManager.Model.DTO.UserDTO;
 import com.example.TaskManager.Model.Entities.Task;
-import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.Service.TaskService;
-import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.mappers.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.stream.Collectors;
-import java.util.List;
 
 @RestController
 public class TaskController {

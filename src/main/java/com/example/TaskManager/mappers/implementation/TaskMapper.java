@@ -1,9 +1,7 @@
 package com.example.TaskManager.mappers.implementation;
 
 import com.example.TaskManager.Model.DTO.TaskDTO;
-import com.example.TaskManager.Model.DTO.UserDTO;
 import com.example.TaskManager.Model.Entities.Task;
-import com.example.TaskManager.Model.Entities.User;
 import com.example.TaskManager.mappers.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

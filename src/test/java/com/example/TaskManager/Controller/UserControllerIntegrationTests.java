@@ -1,7 +1,7 @@
 package com.example.TaskManager.Controller;
 
 import com.example.TaskManager.Model.DTO.UserDTO;
-import com.example.TaskManager.Model.Entities.User;
+import com.example.TaskManager.Model.Entities.UserEntity;
 import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +38,7 @@ public class UserControllerIntegrationTests {
 
     @Test
     public void testCreateUserEndpoint() throws Exception{
-        User userTest = TestDataUtil.createTestUserOne();
+        UserEntity userTest = TestDataUtil.createTestUserOne();
         String userJson = objectMapper.writeValueAsString(userTest);
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/users")
@@ -56,7 +56,7 @@ public class UserControllerIntegrationTests {
     }
     @Test
     public void testGetListUserEndpoint() throws Exception{
-        User testUser = TestDataUtil.createTestUserOne();
+        UserEntity testUser = TestDataUtil.createTestUserOne();
         userService.save(testUser);
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/users/all")
@@ -75,7 +75,7 @@ public class UserControllerIntegrationTests {
 
     @Test
     public void testGetSingleUserEndpoint() throws Exception{
-        User testUser = TestDataUtil.createTestUserOne();
+        UserEntity testUser = TestDataUtil.createTestUserOne();
         userService.save(testUser);
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/users/{id}", testUser.getId())
@@ -111,8 +111,8 @@ public class UserControllerIntegrationTests {
 
     @Test
     public void testFullUpdateReturns200() throws Exception{
-        User testUser = TestDataUtil.createTestUserOne();
-        User savedUser = userService.save(testUser);
+        UserEntity testUser = TestDataUtil.createTestUserOne();
+        UserEntity savedUser = userService.save(testUser);
 
         UserDTO testUserDTO = TestDataUtil.createTestUserDTOOne();
         String authorDTOJson = objectMapper.writeValueAsString(testUserDTO);
@@ -130,8 +130,8 @@ public class UserControllerIntegrationTests {
 
     @Test
     public void testPartialUpdateReturns200() throws Exception{
-        User user = TestDataUtil.createTestUserOne();
-        User savedUser = userService.save(user);
+        UserEntity user = TestDataUtil.createTestUserOne();
+        UserEntity savedUser = userService.save(user);
 
         UserDTO testUserDTO = TestDataUtil.createTestUserDTOOne();
         String userDTOJson = objectMapper.writeValueAsString(testUserDTO);
@@ -156,8 +156,8 @@ public class UserControllerIntegrationTests {
 
     @Test
     public void testDeleteAuthorReturns204ForExistingUser() throws Exception{
-        User user = TestDataUtil.createTestUserOne();
-        User savedUser = userService.save(user);
+        UserEntity user = TestDataUtil.createTestUserOne();
+        UserEntity savedUser = userService.save(user);
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/users/delete/{id}", savedUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)

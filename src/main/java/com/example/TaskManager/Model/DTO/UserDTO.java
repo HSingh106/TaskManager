@@ -15,12 +15,8 @@ import java.util.List;
 @Builder
 public class UserDTO{
 
-    private Long id;
-
     private String username;
 
     private String password;
-    @Builder.Default
-    private List<Task> tasks = new ArrayList<>();
 
 }

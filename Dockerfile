@@ -1,4 +1,4 @@
-FROM openjdk:22-jdk-alpine
-MAINTAINER Harman
-COPY target/*.jar app.jar
+FROM openjdk:17-jdk-alpine
+ARG JAR_FILE=target/*.jar
+COPY ./target/TaskManager-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]

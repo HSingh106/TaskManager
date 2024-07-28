@@ -1,8 +1,7 @@
 package com.example.TaskManager.Controller;
 
 import com.example.TaskManager.Model.DTO.UserDTO;
-import com.example.TaskManager.Model.Entities.Task;
-import com.example.TaskManager.Model.Entities.User;
+import com.example.TaskManager.Model.Entities.UserEntity;
 import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.mappers.Mapper;
 import org.springframework.data.domain.Page;
@@ -11,32 +10,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
 
     private UserService userService;
 
-    private Mapper<User, UserDTO> userMapper;
+    private Mapper<UserEntity, UserDTO> userMapper;
 
-    public UserController(UserService userService, Mapper<User, UserDTO> userMapper) {
+    public UserController(UserService userService, Mapper<UserEntity, UserDTO> userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
     }
 
     @PostMapping(path = "/users")
     public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
-        User user = userMapper.mapFrom(userDTO);
-        User savedUser = userService.save(user);
+        UserEntity user = userMapper.mapFrom(userDTO);
+        UserEntity savedUser = userService.save(user);
         return new ResponseEntity<>(userMapper.mapTo(savedUser), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/users/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
-        Optional<User> userFound = userService.findOne(id);
+        Optional<UserEntity> userFound = userService.findOne(id);
         return userFound.map(user -> {
             UserDTO userDTO = userMapper.mapTo(user);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
@@ -45,7 +42,7 @@ public class UserController {
 
     @GetMapping(path = "/users/all")
     public Page<UserDTO> getAllUsers(Pageable pageable) {
-        Page<User> userFound = userService.findAll(pageable);
+        Page<UserEntity> userFound = userService.findAll(pageable);
         return userFound.map(userMapper::mapTo);
     }
 
@@ -60,8 +57,8 @@ public class UserController {
         if(!userService.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        User user = userMapper.mapFrom(userDTO);
-        User updatedUser = userService.partialUpdate(id, user);
+        UserEntity user = userMapper.mapFrom(userDTO);
+        UserEntity updatedUser = userService.partialUpdate(id, user);
         return ResponseEntity.ok(userMapper.mapTo(updatedUser));
     }
 
@@ -70,9 +67,9 @@ public class UserController {
         if(!userService.existsById(userId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userDTO.setId(userId);
-        User user = userMapper.mapFrom(userDTO);
-        User savedUser = userService.save(user);
+       // userDTO.setId(userId);
+        UserEntity user = userMapper.mapFrom(userDTO);
+        UserEntity savedUser = userService.save(user);
         return new ResponseEntity<>(
                 userMapper.mapTo(savedUser),
                 HttpStatus.OK);

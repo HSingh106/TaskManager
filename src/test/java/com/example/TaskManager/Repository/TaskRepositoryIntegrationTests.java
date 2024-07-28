@@ -1,7 +1,7 @@
 package com.example.TaskManager.Repository;
 
 import com.example.TaskManager.Model.Entities.Task;
-import com.example.TaskManager.Model.Entities.User;
+import com.example.TaskManager.Model.Entities.UserEntity;
 import com.example.TaskManager.TestDataUtil;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ public class TaskRepositoryIntegrationTests {
     @Test
     @Transactional
     public void TaskRepository_TaskCreateAndRecall_ReturnCreatedTask(){
-        User user = TestDataUtil.createTestUserOne();
+        UserEntity user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
         Task task = TestDataUtil.createTestTaskOne();
         task.setUser(user);
@@ -44,7 +44,7 @@ public class TaskRepositoryIntegrationTests {
     @Test
     @Transactional
     public void TaskRepository_CreateAndRecallMultipleTasks_ReturnCreatedTasks(){
-        User user = TestDataUtil.createTestUserOne();
+        UserEntity user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
         Task task1 = TestDataUtil.createTestTaskOne();
         Task task2 = TestDataUtil.createTestTaskTwo();
@@ -62,7 +62,7 @@ public class TaskRepositoryIntegrationTests {
 
     @Test
     public void TaskRepository_TaskCreateAndUpdate_ReturnUpdatedTask(){
-        User user = TestDataUtil.createTestUserOne();
+        UserEntity user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
         Task task = TestDataUtil.createTestTaskOne();
         task.setId(1L);
@@ -80,7 +80,7 @@ public class TaskRepositoryIntegrationTests {
 
     @Test
     public void TaskRepository_TaskDelete_ReturnDeletedTask(){
-        User user = TestDataUtil.createTestUserOne();
+        UserEntity user = TestDataUtil.createTestUserOne();
         userRepository.save(user);
         Task task = TestDataUtil.createTestTaskOne();
         task.setId(1L);

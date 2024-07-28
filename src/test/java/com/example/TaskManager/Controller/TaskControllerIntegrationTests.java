@@ -2,7 +2,7 @@ package com.example.TaskManager.Controller;
 
 import com.example.TaskManager.Model.DTO.TaskDTO;
 import com.example.TaskManager.Model.Entities.Task;
-import com.example.TaskManager.Model.Entities.User;
+import com.example.TaskManager.Model.Entities.UserEntity;
 import com.example.TaskManager.Service.TaskService;
 import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.TestDataUtil;
@@ -52,9 +52,9 @@ public class TaskControllerIntegrationTests {
     @Test
     public void testCreateTaskEndpoint() throws Exception{
         Task taskTest = TestDataUtil.createTestTaskOne();
-        User userTask = TestDataUtil.createTestUserOne();
+        UserEntity userTask = TestDataUtil.createTestUserOne();
 
-        User savedUser = userService.save(userTask);
+        UserEntity savedUser = userService.save(userTask);
         String taskJson = objectMapper.writeValueAsString(taskTest);
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/tasks/{id}", savedUser.getId())
@@ -76,9 +76,9 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testGetTaskEndpoint() throws Exception{
-        User user = TestDataUtil.createTestUserOne();
+        UserEntity user = TestDataUtil.createTestUserOne();
         Task task = TestDataUtil.createTestTaskOne();
-        User savedUser = userService.save(user);
+        UserEntity savedUser = userService.save(user);
         Task savedTask = taskService.save(savedUser.getId(), task);
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/user/task/{taskId}", savedTask.getId())
@@ -98,9 +98,9 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testGetListAllUserTaskEndpoint() throws Exception{
-        User testUser = TestDataUtil.createTestUserOne();
+        UserEntity testUser = TestDataUtil.createTestUserOne();
         Task taskTest = TestDataUtil.createTestTaskOne();
-        User savedUser = userService.save(testUser);
+        UserEntity savedUser = userService.save(testUser);
         Task taskTestTwo = TestDataUtil.createTestTaskTwo();
         Task taskTestThree = TestDataUtil.createTestTaskThree();
         taskService.save(savedUser.getId(), taskTest);
@@ -147,13 +147,13 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testGetAllUserTaskWithNameEndpoint() throws Exception{
-        User testUser = TestDataUtil.createTestUserOne();
+        UserEntity testUser = TestDataUtil.createTestUserOne();
         Task taskTest = TestDataUtil.createTestTaskOne();
         Task taskTestTwo = TestDataUtil.createTestTaskOne();
         taskTestTwo.setTaskStatus("Complete");
         Task taskTestThree = TestDataUtil.createTestTaskOne();
         taskTestThree.setTaskDescription("Chest & Triceps");
-        User savedUser = userService.save(testUser);
+        UserEntity savedUser = userService.save(testUser);
         taskService.save(savedUser.getId(), taskTest);
         taskService.save(savedUser.getId(), taskTestTwo);
         taskService.save(savedUser.getId(), taskTestThree);
@@ -208,8 +208,8 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testDeleteUserEndpoint() throws Exception{
-        User user = TestDataUtil.createTestUserOne();
-        User savedUser = userService.save(user);
+        UserEntity user = TestDataUtil.createTestUserOne();
+        UserEntity savedUser = userService.save(user);
         Task task = TestDataUtil.createTestTaskOne();
         Task savedTask = taskService.save(savedUser.getId(), task);
         mockMvc.perform(
@@ -220,8 +220,8 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testPartialUpdateTaskEndpoint() throws Exception{
-        User user = TestDataUtil.createTestUserOne();
-        User savedUser = userService.save(user);
+        UserEntity user = TestDataUtil.createTestUserOne();
+        UserEntity savedUser = userService.save(user);
 
         Task task = TestDataUtil.createTestTaskOne();
         Task savedTask = taskService.save(savedUser.getId(), task);
@@ -258,8 +258,8 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testFullUpdateReturns200() throws Exception{
-        User testUser = TestDataUtil.createTestUserOne();
-        User savedUser = userService.save(testUser);
+        UserEntity testUser = TestDataUtil.createTestUserOne();
+        UserEntity savedUser = userService.save(testUser);
         Task testTask = TestDataUtil.createTestTaskOne();
         Task savedTask = taskService.save(savedUser.getId(), testTask);
 

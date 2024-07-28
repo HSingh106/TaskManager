@@ -1,6 +1,5 @@
 package com.example.TaskManager.Model.Entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,5 +35,5 @@ public class Task {
     @ManyToOne()
     @JoinColumn(name = "user_id")
     @JsonIgnore
-    private User user;
+    private UserEntity user;
 }

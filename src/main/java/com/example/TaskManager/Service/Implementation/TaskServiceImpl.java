@@ -10,11 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.example.TaskManager.Model.Entities.User;
+import com.example.TaskManager.Model.Entities.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -28,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
     }
     @Override
     public Task save(Long id,Task task) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user with associated review not found"));
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user with associated review not found"));
         task.setUser(user);
         return taskRepository.save(task);
     }
