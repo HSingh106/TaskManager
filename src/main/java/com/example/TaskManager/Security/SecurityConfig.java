@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/auth/**").permitAll()
+                        .requestMatchers("/tasks/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .httpBasic();

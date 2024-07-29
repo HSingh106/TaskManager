@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/tasks")
 public class TaskController {
 
     private TaskService taskService;
@@ -22,44 +23,44 @@ public class TaskController {
         this.taskMapper = taskMapper;
     }
 
-    @PostMapping(path = "/tasks/{id}")
+    @PostMapping(path = "/{id}")
     public ResponseEntity<TaskDTO> addTask(@PathVariable("id")  Long id, @RequestBody TaskDTO taskDTO) {
         Task task = taskMapper.mapFrom(taskDTO);
         Task createdTask = taskService.save(id, task);
         return new ResponseEntity<>(taskMapper.mapTo(createdTask), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/user/task/{taskId}")
+    @GetMapping(path = "/task/{taskId}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable("taskId") Long id){
         return new ResponseEntity<>(taskMapper.mapTo(taskService.findOne(id)), HttpStatus.OK);
     }
 
 
-    @GetMapping(path = "/users/{id}/tasks")
+    @GetMapping(path = "/users/{id}")
     public Page<TaskDTO> getAllTasksForUser(@PathVariable("id") Long userId, Pageable pageable){
         Page<Task> tasks = taskService.findAll(pageable,userId);
         return tasks.map(taskMapper::mapTo);
     }
 
-    @GetMapping(path = "/users/{id}/tasks/{name}")
+    @GetMapping(path = "/users/{id}/{name}")
     public Page<TaskDTO> getAllTasksWithName(@PathVariable("id") Long userId, @PathVariable("name") String name, Pageable pageable){
         Page<Task> tasks = taskService.findAllUsersWithName(pageable, userId, name);
         return tasks.map(taskMapper::mapTo);
     }
 
-    @DeleteMapping(path = "/tasks/delete/{id}")
+    @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity deleteTask(@PathVariable("id") Long id) {
         taskService.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping("/task/PartialUpdate/{id}")
+    @PatchMapping("/PartialUpdate/{id}")
     public ResponseEntity<Task> partialUpdateTask(@PathVariable Long id, @RequestBody Task task) {
         Task updatedTask = taskService.partialUpdate(id, task);
         return ResponseEntity.ok(updatedTask);
     }
 
-    @PutMapping(path = "/task/complete/{taskId}")
+    @PutMapping(path = "/CompleteUpdate/{taskId}")
     public ResponseEntity<TaskDTO> fullUpdateTask(@PathVariable("taskId") Long taskId, @RequestBody TaskDTO TaskDTO){
         if(!taskService.existsById(taskId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
