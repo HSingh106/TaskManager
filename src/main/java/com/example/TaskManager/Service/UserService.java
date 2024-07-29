@@ -18,5 +18,7 @@ public interface UserService {
 
     boolean existsById(Long id);
 
+    boolean existsByUsername(String username);
+
     UserEntity partialUpdate(Long id, UserEntity user);
 }

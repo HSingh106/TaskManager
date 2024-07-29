@@ -43,6 +43,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
     public UserEntity partialUpdate(Long id, UserEntity user) {
         UserEntity changeUser = userRepository.findById(id).get();
         if(user.getPassword() != null){

@@ -7,6 +7,8 @@ import com.example.TaskManager.Model.Entities.UserEntity;
 import com.example.TaskManager.Repository.RoleRepository;
 import com.example.TaskManager.Repository.UserRepository;
 import com.example.TaskManager.Security.JwtGenerator;
+import com.example.TaskManager.Service.RoleService;
+import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.mappers.implementation.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,23 +29,23 @@ import java.util.Collections;
 public class AuthController {
 
     private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
+    private UserService userService;
+    private RoleService roleService;
     private PasswordEncoder passwordEncoder;
     private UserMapper userMapper;
     private JwtGenerator tokenGenerator;
 
     public AuthController(
        AuthenticationManager authenticationManager,
-       UserRepository userRepository,
-       RoleRepository roleRepository,
+       UserService userService,
+       RoleService roleService,
        PasswordEncoder passwordEncoder,
        UserMapper userMapper,
        JwtGenerator tokenGenerator
     ) {
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.userService = userService;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.tokenGenerator = tokenGenerator;
@@ -51,7 +53,7 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
-        if(userRepository.existsByUsername(userDTO.getUsername())){
+        if(userService.existsByUsername(userDTO.getUsername())){
             return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
         }
 
@@ -59,9 +61,9 @@ public class AuthController {
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
-        Role roles = roleRepository.findByName("USER").get();
+        Role roles = roleService.findByName("USER").get();
         userEntity.setRoles(Collections.singletonList(roles));
-        userRepository.save(userEntity);
+        userService.save(userEntity);
 
         return new ResponseEntity<>("User created", HttpStatus.CREATED);
     }
