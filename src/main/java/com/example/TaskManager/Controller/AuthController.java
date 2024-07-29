@@ -1,10 +1,12 @@
 package com.example.TaskManager.Controller;
 
+import com.example.TaskManager.Model.DTO.AuthResponseDTO;
 import com.example.TaskManager.Model.DTO.UserDTO;
 import com.example.TaskManager.Model.Entities.Role;
 import com.example.TaskManager.Model.Entities.UserEntity;
 import com.example.TaskManager.Repository.RoleRepository;
 import com.example.TaskManager.Repository.UserRepository;
+import com.example.TaskManager.Security.JwtGenerator;
 import com.example.TaskManager.mappers.implementation.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,19 +31,22 @@ public class AuthController {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private UserMapper userMapper;
+    private JwtGenerator tokenGenerator;
 
     public AuthController(
        AuthenticationManager authenticationManager,
        UserRepository userRepository,
        RoleRepository roleRepository,
        PasswordEncoder passwordEncoder,
-       UserMapper userMapper
+       UserMapper userMapper,
+       JwtGenerator tokenGenerator
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
+        this.tokenGenerator = tokenGenerator;
     }
 
     @PostMapping("register")
@@ -62,9 +67,10 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody UserDTO userDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User Login Successful!", HttpStatus.OK);
+        String token = tokenGenerator.generateToken(authentication);
+        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
 }

@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore SecurityConstants file
+src/main/java/com/example/taskmanager/security/SecurityConstants.java
+
