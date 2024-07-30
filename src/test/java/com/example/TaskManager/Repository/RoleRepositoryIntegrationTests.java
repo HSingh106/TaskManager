@@ -66,4 +66,14 @@ public class RoleRepositoryIntegrationTests {
         roleRepository.delete(testRole);
         assertThat(roleRepository.findAll()).hasSize(1);
     }
+
+    @Test
+    public void testFindingRoleByName(){
+        Role testRole = new Role(1L,"admin");
+        Role testRole2 = new Role(2L,"admin2");
+        roleRepository.save(testRole);
+        roleRepository.save(testRole2);
+        Optional<Role> role = roleRepository.findByName(testRole.getName());
+        assertThat(role.get()).isEqualTo(testRole);
+    }
 }
