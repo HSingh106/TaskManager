@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class RoleServiceImpl extends RoleService {
+public class RoleServiceImpl implements RoleService {
 
     private RoleRepository roleRepository;
 
@@ -19,7 +19,12 @@ public class RoleServiceImpl extends RoleService {
     }
     @Override
     public Optional<Role> findByName(String name) {
-        return roleRepository.findByName("name");
+        return roleRepository.findByName(name);
+    }
+
+    @Override
+    public Role save(Role role) {
+        return roleRepository.save(role);
     }
 
 }

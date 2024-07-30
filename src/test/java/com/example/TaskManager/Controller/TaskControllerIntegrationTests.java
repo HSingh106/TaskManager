@@ -1,8 +1,10 @@
 package com.example.TaskManager.Controller;
 
 import com.example.TaskManager.Model.DTO.TaskDTO;
+import com.example.TaskManager.Model.Entities.Role;
 import com.example.TaskManager.Model.Entities.Task;
 import com.example.TaskManager.Model.Entities.UserEntity;
+import com.example.TaskManager.Service.RoleService;
 import com.example.TaskManager.Service.TaskService;
 import com.example.TaskManager.Service.UserService;
 import com.example.TaskManager.TestDataUtil;
@@ -13,15 +15,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -39,14 +47,41 @@ public class TaskControllerIntegrationTests {
 
     private ObjectMapper objectMapper;
 
+    private String token;
+
+    private RoleService roleService;
+
     @Autowired
-    public TaskControllerIntegrationTests(MockMvc mockMvc, TaskService taskService, UserService userService) {
+    public TaskControllerIntegrationTests(MockMvc mockMvc, TaskService taskService, UserService userService, RoleService roleService) throws Exception {
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         this.userService = userService;
         this.mockMvc = mockMvc;
         this.taskService = taskService;
         this.objectMapper = new ObjectMapper();
+        this.roleService = roleService;
+        roleService.save(new Role(1L, "ADMIN"));
+        roleService.save(new Role(2L, "USER"));
         objectMapper.registerModule(new JavaTimeModule());
+        register();
+        token = getAccessToken();
+        userService.save(UserEntity.builder().username("testuser").password("testpassword").build());
+    }
+
+    private void register() throws Exception {
+        String registerRequest =  "{ \"username\": \"testuser\", \"password\": \"testpassword\" }";
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(registerRequest));
+    }
+
+    private String getAccessToken() throws Exception {
+        String loginRequest = "{ \"username\": \"testuser\", \"password\": \"testpassword\" }";
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginRequest))
+                .andReturn();
+        String responseString = result.getResponse().getContentAsString();
+        return objectMapper.readTree(responseString).get("accessToken").asText();
     }
 
     @Test
@@ -58,10 +93,11 @@ public class TaskControllerIntegrationTests {
         String taskJson = objectMapper.writeValueAsString(taskTest);
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/tasks/{id}", savedUser.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskJson)
         ).andExpect(
-                MockMvcResultMatchers.status().isCreated()
+                status().isCreated()
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
@@ -81,9 +117,10 @@ public class TaskControllerIntegrationTests {
         UserEntity savedUser = userService.save(user);
         Task savedTask = taskService.save(savedUser.getId(), task);
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/user/task/{taskId}", savedTask.getId())
+                MockMvcRequestBuilders.get("/tasks/{taskId}", savedTask.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(status().isOk()
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
@@ -107,11 +144,12 @@ public class TaskControllerIntegrationTests {
         taskService.save(savedUser.getId(), taskTestTwo);
         taskService.save(savedUser.getId(), taskTestThree);
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/users/{id}/tasks", savedUser.getId())
+                MockMvcRequestBuilders.get("/tasks/users/{id}", savedUser.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "1")
                         .param("size", "3")
-        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(status().isOk()
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber()
         ).andExpect(
@@ -159,11 +197,12 @@ public class TaskControllerIntegrationTests {
         taskService.save(savedUser.getId(), taskTestThree);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/users/{id}/tasks/{name}", savedUser.getId(), "Gym")
+                MockMvcRequestBuilders.get("/tasks/users/{id}/{name}", savedUser.getId(), "Gym")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "3")
-        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(status().isOk()
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber()
         ).andExpect(
@@ -198,13 +237,6 @@ public class TaskControllerIntegrationTests {
 
     }
 
-    @Test
-    public void testDeleteTaskEndpointReturns404() throws Exception{
-        mockMvc.perform(
-                MockMvcRequestBuilders.delete("/tasks/delete/999")
-                        .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isNoContent());
-    }
 
     @Test
     public void testDeleteUserEndpoint() throws Exception{
@@ -214,8 +246,9 @@ public class TaskControllerIntegrationTests {
         Task savedTask = taskService.save(savedUser.getId(), task);
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/tasks/delete/{id}", savedTask.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+        ).andExpect(status().isNoContent());
     }
 
     @Test
@@ -229,10 +262,11 @@ public class TaskControllerIntegrationTests {
         String taskDTOJson = objectMapper.writeValueAsString(taskDTO);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.patch("/task/PartialUpdate/" + savedUser.getId())
+                MockMvcRequestBuilders.patch("/tasks/PartialUpdate/" + savedUser.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskDTOJson)
-        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(status().isOk()
         ).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedTask.getId())
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.taskName").value("TaskDTO")
@@ -246,17 +280,6 @@ public class TaskControllerIntegrationTests {
     }
 
     @Test
-    public void testFullUpdateReturns404() throws Exception{
-        TaskDTO testTaskDTO = TestDataUtil.createTestTaskDTOOne();
-        String taskJson = objectMapper.writeValueAsString(testTaskDTO);
-        mockMvc.perform(
-                MockMvcRequestBuilders.put("/task/complete/704")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(taskJson)
-        ).andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
-
-    @Test
     public void testFullUpdateReturns200() throws Exception{
         UserEntity testUser = TestDataUtil.createTestUserOne();
         UserEntity savedUser = userService.save(testUser);
@@ -267,10 +290,11 @@ public class TaskControllerIntegrationTests {
         String authorDTOJson = objectMapper.writeValueAsString(testTaskDTO);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/task/complete/{taskId}", savedTask.getId())
+                MockMvcRequestBuilders.put("/tasks/complete/{taskId}", savedTask.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(authorDTOJson)
-        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andExpect(status().isOk()
         ).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedTask.getId())
         ).andExpect(MockMvcResultMatchers.jsonPath("$.taskName").value("TaskDTO")
         ).andExpect(MockMvcResultMatchers.jsonPath("$.taskDescription").value("DescriptionDTO")

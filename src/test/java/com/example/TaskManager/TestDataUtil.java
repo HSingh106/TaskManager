@@ -38,7 +38,6 @@ public final class TestDataUtil {
 
     public static UserDTO createTestUserDTOOne(){
         return UserDTO.builder()
-                .id(1L)
                 .username("JoeDTO")
                 .password("JaneDTO")
                 .build();
@@ -46,7 +45,6 @@ public final class TestDataUtil {
 
     public static TaskDTO createTestTaskDTOOne(){
         return TaskDTO.builder()
-                .id(1L)
                 .taskName("TaskDTO")
                 .taskDescription("DescriptionDTO")
                 .build();
@@ -54,7 +52,6 @@ public final class TestDataUtil {
 
     public static TaskDTO createTestTaskDTOTwo(){
         return TaskDTO.builder()
-                .id(1L)
                 .taskName("TaskDTO")
                 .taskDescription("DescriptionDTO")
                 .taskType("DTO")

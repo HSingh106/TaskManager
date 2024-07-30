@@ -30,7 +30,7 @@ public class TaskController {
         return new ResponseEntity<>(taskMapper.mapTo(createdTask), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/task/{taskId}")
+    @GetMapping(path = "/{taskId}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable("taskId") Long id){
         return new ResponseEntity<>(taskMapper.mapTo(taskService.findOne(id)), HttpStatus.OK);
     }
@@ -50,6 +50,9 @@ public class TaskController {
 
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity deleteTask(@PathVariable("id") Long id) {
+        if(!taskService.existsById(id)){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
         taskService.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -60,7 +63,7 @@ public class TaskController {
         return ResponseEntity.ok(updatedTask);
     }
 
-    @PutMapping(path = "/CompleteUpdate/{taskId}")
+    @PutMapping(path = "/complete/{taskId}")
     public ResponseEntity<TaskDTO> fullUpdateTask(@PathVariable("taskId") Long taskId, @RequestBody TaskDTO TaskDTO){
         if(!taskService.existsById(taskId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

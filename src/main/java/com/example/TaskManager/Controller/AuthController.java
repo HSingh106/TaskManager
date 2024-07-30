@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,7 +62,14 @@ public class AuthController {
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
-        Role roles = roleService.findByName("USER").get();
+        Optional<Role> wrappedRoles = roleService.findByName("USER");
+        Role roles;
+        if(wrappedRoles.isPresent()){
+            roles = wrappedRoles.get();
+        }
+        else{
+            return new ResponseEntity<>("Role not found", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         userEntity.setRoles(Collections.singletonList(roles));
         userService.save(userEntity);
 
