@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * represents the role entity that is needed to
+ * provide/keep track of the privilages of users (user, admin)
+ */
 @Entity
 @Table(name = "roles")
 @Data

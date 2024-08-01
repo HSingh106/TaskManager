@@ -6,9 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Represents the DTO class corresponding to the user entity
+ * Meant to help restrict controller access to repository layer
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

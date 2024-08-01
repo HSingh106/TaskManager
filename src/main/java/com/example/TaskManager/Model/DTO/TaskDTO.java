@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents the DTO class corresponding to the task entity
+ * Meant to help restrict controller access to repository layer
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

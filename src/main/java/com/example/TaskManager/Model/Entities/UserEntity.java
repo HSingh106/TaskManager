@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Layout information contained within task entities
+ * Layout information contained within user entities
  * and modify database schema to include user table
- * Also, generate id values for each user entity
+ * and create a many-to-many relationship between user & roles
+ * along with joining columns to develop a table solidifying the relationship
  */
 @Entity
 @Data
